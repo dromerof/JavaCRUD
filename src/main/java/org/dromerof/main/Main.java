@@ -16,17 +16,10 @@ public class Main {
             System.out.println("-----Lista de empleados-----");
             repository.findAll().forEach(System.out::println);
 
-            System.out.println("Actualizando un empleado...........");
-            Employee employee =  new Employee();
-            employee.setId(8);
-            employee.setFirst_name("Daniel");
-            employee.setPa_surname("Programador");
-            employee.setMa_surname("Romero");
-            employee.setEmail("dromerof@example.com");
-            employee.setSalary(22000F);
-            repository.save(employee);
+            System.out.println("-----Empleado eliminado-------");
+            repository.delete(8);
 
-            System.out.println("-----Empleado actualizado-------");
+            System.out.println("-----Lista de empleados-----");
             repository.findAll().forEach(System.out::println);
         }
 

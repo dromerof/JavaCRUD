@@ -42,13 +42,13 @@ public class EmployeesRepository implements Repository<Employee> {
     }
 
     @Override
-    public void save(Employee employee){
+    public void save(Employee employee) {
         String sql;
-        if (employee.getId()!= null && employee.getId()>0){
-        sql= "UPDATE employees SET first_name =?, pa_surname =?, ma_surname =?, email =?, salary =? WHERE id =?";
+        if (employee.getId() != null && employee.getId() > 0) {
+            sql = "UPDATE employees SET first_name =?, pa_surname =?, ma_surname =?, email =?, salary =? WHERE id =?";
 
         } else {
-            sql= "INSERT INTO employees (first_name, pa_surname, ma_surname, email, salary) VALUES (?,?,?,?,?)";
+            sql = "INSERT INTO employees (first_name, pa_surname, ma_surname, email, salary) VALUES (?,?,?,?,?)";
         }
         try (PreparedStatement myStant = getConnection().prepareStatement(sql)) {
             myStant.setString(1, employee.getFirst_name());
@@ -56,18 +56,21 @@ public class EmployeesRepository implements Repository<Employee> {
             myStant.setString(3, employee.getMa_surname());
             myStant.setString(4, employee.getEmail());
             myStant.setFloat(5, employee.getSalary());
-            if (employee.getId() != null && employee.getId()>0){
+            if (employee.getId() != null && employee.getId() > 0) {
                 myStant.setInt(6, employee.getId());
             }
             myStant.executeUpdate();
-        } catch (SQLException e){
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     @Override
-    public void delete(Integer id) {
-
+    public void delete(Integer id) throws SQLException {
+        try (PreparedStatement myStant = getConnection().prepareStatement("DELETE FROM employees WHERE id=?")) {
+            myStant.setInt(1, id);
+            myStant.executeUpdate();
+        }
     }
 
     private Employee createEmployee(ResultSet myRes) throws SQLException {
