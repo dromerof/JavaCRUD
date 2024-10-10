@@ -1,6 +1,6 @@
 package org.dromerof.model;
 
-public class Employees {
+public class Employee {
 
     private Integer id;
     private String first_name;
@@ -9,10 +9,10 @@ public class Employees {
     private String email;
     private Float salary;
 
-    public Employees() {
+    public Employee() {
     }
 
-    public Employees(Integer id, String first_name, String pa_surname, String ma_surname, String email, Float salary) {
+    public Employee(Integer id, String first_name, String pa_surname, String ma_surname, String email, Float salary) {
         this.id = id;
         this.first_name = first_name;
         this.pa_surname = pa_surname;
