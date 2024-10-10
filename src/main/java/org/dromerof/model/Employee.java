@@ -71,13 +71,17 @@ public class Employee {
 
     @Override
     public String toString() {
-        return "Employees{" +
-                "id=" + id +
-                ", first_name='" + first_name + '\'' +
-                ", pa_surname='" + pa_surname + '\'' +
-                ", ma_surname='" + ma_surname + '\'' +
-                ", email='" + email + '\'' +
-                ", salary=" + salary +
-                '}';
+        StringBuilder sb = new StringBuilder();
+        sb.append("Employee {").append(System.lineSeparator());
+        sb.append("  id: ").append(id).append(",").append(System.lineSeparator());
+        sb.append("  first_name: '").append(first_name).append("',").append(System.lineSeparator());
+        sb.append("  pa_surname: '").append(pa_surname).append("',").append(System.lineSeparator());
+        sb.append("  ma_surname: '").append(ma_surname).append("',").append(System.lineSeparator());
+        sb.append("  email: '").append(email).append("',").append(System.lineSeparator());
+        sb.append("  salary: ").append(salary).append(System.lineSeparator());
+        sb.append("}");
+
+        return sb.toString();
     }
+
 }

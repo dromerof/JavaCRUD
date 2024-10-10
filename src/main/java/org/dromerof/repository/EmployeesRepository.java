@@ -18,9 +18,10 @@ public class EmployeesRepository implements Repository<Employee> {
         List<Employee> employees = new ArrayList<>();
 
         try (Statement myStant = getConnection().createStatement();
-             ResultSet myRes = myStant.executeQuery("SELECT * FROM Employees")) {
+             ResultSet myRes = myStant.executeQuery("SELECT * FROM employees")) {
             while (myRes.next()) {
-                createEmployee(myRes);
+                Employee e = createEmployee(myRes);
+                employees.add(e);
             }
         }
         return employees;
