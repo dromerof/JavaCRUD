@@ -7,7 +7,6 @@ import java.sql.*;
 public class Main {
     public static void main(String[] args) {
 
-
              // 1. Conexión a nuestra base de datos usando las variables de entorno
         try (Connection myConn = DatabaseConnection.getInstance();
              // 2. Crear una declaración objeto
