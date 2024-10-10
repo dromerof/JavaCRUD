@@ -30,10 +30,10 @@ public class EmployeesRepository implements Repository<Employee> {
     @Override
     public Employee getByID(Integer id) throws SQLException {
         Employee employee = null;
-        try(PreparedStatement myStant = getConnection().prepareStatement("SELECT * FROM employees WHERE id = ?")) {
+        try (PreparedStatement myStant = getConnection().prepareStatement("SELECT * FROM employees WHERE id = ?")) {
             myStant.setInt(1, id);
-            try(ResultSet myRes = myStant.executeQuery()) {
-                if (myRes.next()){
+            try (ResultSet myRes = myStant.executeQuery()) {
+                if (myRes.next()) {
                     employee = createEmployee(myRes);
                 }
             }
@@ -42,8 +42,17 @@ public class EmployeesRepository implements Repository<Employee> {
     }
 
     @Override
-    public void save(Employee employee) {
+    public void save(Employee employee) throws SQLException {
 
+        String sql = "INSERT INTO employees (first_name, pa_surname, ma_surname, email, salary) VALUES (?,?,?,?,?)";
+        try (PreparedStatement myStant = getConnection().prepareStatement(sql)) {
+            myStant.setString(1, employee.getFirst_name());
+            myStant.setString(2, employee.getPa_surname());
+            myStant.setString(3, employee.getMa_surname());
+            myStant.setString(4, employee.getEmail());
+            myStant.setFloat(5, employee.getSalary());
+            myStant.executeUpdate();
+        }
     }
 
     @Override
