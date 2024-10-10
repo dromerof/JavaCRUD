@@ -42,16 +42,26 @@ public class EmployeesRepository implements Repository<Employee> {
     }
 
     @Override
-    public void save(Employee employee) throws SQLException {
+    public void save(Employee employee){
+        String sql;
+        if (employee.getId()!= null && employee.getId()>0){
+        sql= "UPDATE employees SET first_name =?, pa_surname =?, ma_surname =?, email =?, salary =? WHERE id =?";
 
-        String sql = "INSERT INTO employees (first_name, pa_surname, ma_surname, email, salary) VALUES (?,?,?,?,?)";
+        } else {
+            sql= "INSERT INTO employees (first_name, pa_surname, ma_surname, email, salary) VALUES (?,?,?,?,?)";
+        }
         try (PreparedStatement myStant = getConnection().prepareStatement(sql)) {
             myStant.setString(1, employee.getFirst_name());
             myStant.setString(2, employee.getPa_surname());
             myStant.setString(3, employee.getMa_surname());
             myStant.setString(4, employee.getEmail());
             myStant.setFloat(5, employee.getSalary());
+            if (employee.getId() != null && employee.getId()>0){
+                myStant.setInt(6, employee.getId());
+            }
             myStant.executeUpdate();
+        } catch (SQLException e){
+            e.printStackTrace();
         }
     }
 
