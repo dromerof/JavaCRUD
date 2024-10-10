@@ -3,14 +3,11 @@ package org.dromerof.repository;
 import org.dromerof.model.Employee;
 import org.dromerof.util.DatabaseConnection;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeesRepository implements Repository<Employee>{
+public class EmployeesRepository implements Repository<Employee> {
 
     private Connection getConnection() throws SQLException {
         return DatabaseConnection.getInstance();
@@ -20,9 +17,9 @@ public class EmployeesRepository implements Repository<Employee>{
     public List<Employee> findAll() throws SQLException {
         List<Employee> employees = new ArrayList<>();
 
-        try(Statement myStant = getConnection().createStatement();
-             ResultSet myRes = myStant.executeQuery("SELECT * FROM Employees")){
-            while (myRes.next()){
+        try (Statement myStant = getConnection().createStatement();
+             ResultSet myRes = myStant.executeQuery("SELECT * FROM Employees")) {
+            while (myRes.next()) {
                 createEmployee(myRes);
             }
         }
@@ -30,8 +27,17 @@ public class EmployeesRepository implements Repository<Employee>{
     }
 
     @Override
-    public Employee getByID(Integer id) {
-        return null;
+    public Employee getByID(Integer id) throws SQLException {
+        Employee employee = null;
+        try(PreparedStatement myStant = getConnection().prepareStatement("SELECT * FROM employees WHERE id = ?")) {
+            myStant.setInt(1, id);
+            try(ResultSet myRes = myStant.executeQuery()) {
+                if (myRes.next()){
+                    employee = createEmployee(myRes);
+                }
+            }
+        }
+        return employee;
     }
 
     @Override
@@ -43,6 +49,7 @@ public class EmployeesRepository implements Repository<Employee>{
     public void delete(Integer id) {
 
     }
+
     private Employee createEmployee(ResultSet myRes) throws SQLException {
         Employee e = new Employee();
         e.setId(myRes.getInt("id"));
