@@ -7,7 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class EmployeesRepository implements Repository<Employee> {
+public class EmployeeRepository implements Repository<Employee> {
 
     private Connection getConnection() throws SQLException {
         return DatabaseConnection.getInstance();
