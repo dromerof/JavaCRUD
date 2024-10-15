@@ -9,17 +9,17 @@ import java.util.List;
 
 public class EmployeeRepository implements Repository<Employee> {
 
-    private Connection myConn;
-
-    public EmployeeRepository(Connection myConn) {
-        this.myConn = myConn;
+    private Connection getConnection() throws SQLException {
+        return DatabaseConnection.getConnection();
     }
+
 
     @Override
     public List<Employee> findAll() throws SQLException {
         List<Employee> employees = new ArrayList<>();
 
-        try (Statement myStant = myConn.createStatement();
+        try (Connection myConn = getConnection();
+             Statement myStant = myConn.createStatement();
              ResultSet myRes = myStant.executeQuery("SELECT * FROM employees")) {
             while (myRes.next()) {
                 Employee e = createEmployee(myRes);
@@ -32,7 +32,8 @@ public class EmployeeRepository implements Repository<Employee> {
     @Override
     public Employee getByID(Integer id) throws SQLException {
         Employee employee = null;
-        try (PreparedStatement myStant = myConn.prepareStatement("SELECT * FROM employees WHERE id = ?")) {
+        try (Connection myConn = getConnection();
+             PreparedStatement myStant = myConn.prepareStatement("SELECT * FROM employees WHERE id = ?")) {
             myStant.setInt(1, id);
             try (ResultSet myRes = myStant.executeQuery()) {
                 if (myRes.next()) {
@@ -52,7 +53,8 @@ public class EmployeeRepository implements Repository<Employee> {
         } else {
             sql = "INSERT INTO employees (first_name, pa_surname, ma_surname, email, salary, curp) VALUES (?,?,?,?,?,?)";
         }
-        try (PreparedStatement myStant = myConn.prepareStatement(sql)) {
+        try (Connection myConn = getConnection();
+             PreparedStatement myStant = myConn.prepareStatement(sql)) {
             myStant.setString(1, employee.getFirst_name());
             myStant.setString(2, employee.getPa_surname());
             myStant.setString(3, employee.getMa_surname());
@@ -70,7 +72,8 @@ public class EmployeeRepository implements Repository<Employee> {
 
     @Override
     public void delete(Integer id) throws SQLException {
-        try (PreparedStatement myStant = myConn.prepareStatement("DELETE FROM employees WHERE id=?")) {
+        try (Connection myConn = getConnection();
+             PreparedStatement myStant = myConn.prepareStatement("DELETE FROM employees WHERE id=?")) {
             myStant.setInt(1, id);
             myStant.executeUpdate();
         }
